@@ -1,0 +1,59 @@
+* app-schematic
+/DSL for creating graphs, flows, and application schematics/
+
+** Features
+- Saves to svg/html or pdf
+- Uses graphviz dot style layout
+- Concise ruby DSL
+- Use ruby control structures for multi-platform, and multi-role diagrams
+- Auto-updates on save(ish)
+
+** Usage
+It's just a ruby file(s) that can be "required":
+- For just a simple ruby DSL over graphviz with rendering helpers, only require =core.rb=.
+- For the "application schematic" DSL, also require =app-dsl.rb=.
+
+*** Example
+- To generate a basic sample graph, run =ruby core.rb=. The end of the file shows the code that generates the graph.
+- =example.rb= has a more sophisticated example which generates multiple view on the same application (mobile vs. web, visitor vs. member).
+
+*** Auto-update on save
+- To generate a flow from e.g. =example.rb= every time it is modified, make =example.rb= executable, and use: =fswatch -o *.rb | xargs -n1 -I{} ./example.rb=
+
+** What is an *application schematic*?
+A diagram that allows people to /understand/ and /convey/ all of the interactive components of an application in a way that assists decision making and prototyping. 
+It can be thought of as a powerful generalization of a user flow or site map (though sophisticated app schematics may contain much more information).
+
+*** Benefits
+- Allows a designer to quickly see how a ux change in one place might necessitate changes in other places - by making it easier to see and understand the entire application (or at least larger chunks of it) simultaneously. 
+- Helps motivate design trade-offs to other stakeholders. After a brief introduction to the diagram semantics, complex changes and trade-offs can be conveyed efficiently, reducing sources of misunderstanding.
+
+** Dependencies
+*** Required:
+- ruby 1.9+
+- dot (graphviz)
+*** Optional: 
+- fswatch
+
+** Maturity and known issues
+This was put together quickly to assist with a project, and the code is not gorgeous. But does the job much faster than any alternatives that I am aware of, and has been cleaned up a little in subsequent uses. 
+
+Because it is just a design tool that does not need to run in any production environment, I consider perfectly usable even at "v0.1". 
+
+*** Compatibility
+It works on newer macs but probably not on any other OS at the moment.
+
+*** Usage hacks
+- The auto-updating pdf requires preview open showing that pdf.
+- The auto-updating html requires chrome open to the tab with that page.
+
+*** Graphviz hacks
+- Nodes are written to *all* subgraphs they are specifically *declared* in (via a 'n' or 'node' command, not 'n_helper')
+- If they are not specifically declared anywhere, they are written to the root graph
+- Nodes accumulate all opts given to them by the graph they are declared and it's children graphs.
+
+*** Code organization
+Lets just say there are a number of things I would change, which would not affect the API, given more time.
+
+** Future / contributions
+This is already "good enough" for me, so I may not make any significant improvements on a planned time-line, but I am happy to have collaborators, co-owners, and take pull requests. 
